@@ -1,6 +1,6 @@
 # webserver-example 
 
-- 基于 Linux 的 C++ 高性能 Web 服务器，使用线程池 + epoll I/O多路复用技术处理高并发连接，完整解析 HTTP 请求并实现静态资源响应。
+- 基于 Linux 的 C++ 高性能 Web 服务器，使用线程池 + epoll I/O 多路复用技术处理高并发连接，完整解析 HTTP 请求并实现静态资源响应。
 
 
 ## tree
