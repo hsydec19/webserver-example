@@ -26,6 +26,8 @@
 ## 编译与执行
 
 ```
+mkdir bin
+mkdir build
 cd build
 cmake .. 
 make
