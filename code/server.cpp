@@ -11,6 +11,7 @@
 #include "locker.h"
 #include "threadpool.h"
 #include "http_conn.h"
+#include "log.h"
 
 #define MAX_FD 65536   // 最大的文件描述符个数
 #define MAX_EVENT_NUMBER 15000  // 监听的最大的事件数量
@@ -30,13 +31,16 @@ void addsig(int sig, void( handler )(int)){
 
 int main( int argc, char* argv[] ) {
     
+    AsyncLogger::getInstance().start();
     if( argc <= 1 ) {
-        printf( "usage: %s port_number\n", basename(argv[0]));
+        AsyncLogger::getInstance().log("usage: " + std::string(basename(argv[0])) + " port_number\n");
+        // printf( "usage: %s port_number\n", basename(argv[0]));
         return 1;
     }
 
     // 获取端口号
     int port = atoi( argv[1] );
+    AsyncLogger::getInstance().log("Server started on port: " + std::to_string(port));
 
     // 对SIGPIE信号进行处理
     addsig( SIGPIPE, SIG_IGN );
@@ -82,7 +86,8 @@ int main( int argc, char* argv[] ) {
         int number = epoll_wait( epollfd, events, MAX_EVENT_NUMBER, -1 );
         
         if ( ( number < 0 ) && ( errno != EINTR ) ) {
-            printf( "epoll failure\n" );
+            AsyncLogger::getInstance().log("Epoll failure");
+            // printf( "epoll failure\n" );
             break;
         }
 
@@ -97,7 +102,8 @@ int main( int argc, char* argv[] ) {
                 int connfd = accept( listenfd, ( struct sockaddr* )&client_address, &client_addrlength );
                 
                 if ( connfd < 0 ) {
-                    printf( "errno is: %d\n", errno );
+                    AsyncLogger::getInstance().log("Connection error: " + std::string(strerror(errno)));
+                    // printf( "errno is: %d\n", errno );
                     continue;
                 } 
 
@@ -136,5 +142,8 @@ int main( int argc, char* argv[] ) {
     close( listenfd );
     delete [] users;
     delete pool;
+    // 程序结束时停止日志系统
+    AsyncLogger::getInstance().log("end");
+    AsyncLogger::getInstance().stop();
     return 0;
 }

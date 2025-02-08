@@ -1,4 +1,6 @@
 #include "http_conn.h"
+#include <string>
+#include "log.h"
 
 // 定义HTTP响应的一些状态信息
 const char* ok_200_title = "OK";
@@ -222,7 +224,8 @@ http_conn::HTTP_CODE http_conn::parse_headers(char* text) {
         text += strspn( text, " \t" );
         m_host = text;
     } else {
-        printf( "oop! unknow header %s\n", text );
+        AsyncLogger::getInstance().log("oop! unknow header " + std::string(text));
+        // printf( "oop! unknow header %s\n", text );
     }
     return NO_REQUEST;
 }
@@ -248,7 +251,8 @@ http_conn::HTTP_CODE http_conn::process_read() {
         // 获取一行数据
         text = get_line();
         m_start_line = m_checked_idx;
-        printf( "got 1 http line: %s\n", text );
+        AsyncLogger::getInstance().log("got 1 http line: " + std::string(text));
+        // printf( "got 1 http line: %s\n", text );
 
         switch ( m_check_state ) {
             case CHECK_STATE_REQUESTLINE: {
