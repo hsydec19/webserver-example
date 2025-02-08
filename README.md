@@ -12,15 +12,17 @@
 ├── code    # 源代码
 │   ├── CMakeLists.txt
 │   ├── http_conn.cpp 
+│   ├── log.cpp 
 │   └── server.cpp
 ├── include
 │   ├── http_conn.h
 │   ├── locker.h
+│   ├── log.h
 │   └── threadpool.h
 ├── resources    # html 
 ├── webbench    # 压力测试 
 ├── CMakeLists.txt
-└── README.md
+└──  README.md
 ```
 
 ## 编译与执行
